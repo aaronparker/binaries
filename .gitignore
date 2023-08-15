@@ -1,3 +1,4 @@
 # Ignore file
 .DS_Store
 changelog.txt
+release/**

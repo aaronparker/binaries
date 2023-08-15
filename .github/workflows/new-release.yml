@@ -16,32 +16,45 @@ jobs:
           ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set release parameters
-        id: release
+      - name: Get binaries
+        id: binaries
         shell: pwsh
         run: |
-          $Date = Get-Date -Format "yyyy-MM-dd"
-          echo "release=$Date.${{ github.run_number }}" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-
-          $ChangeLogFile = "${{ github.workspace }}/changelog.txt"
-          "$Date.${{ github.run_number }}" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
-          
-          echo "# Release summary :package:" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
-          "# Release summary :package:" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
-
-          $Versions = Import-Csv -Path "${{ github.workspace }}/binaries.csv" -ErrorAction "Stop"
-          foreach ($Item in $Versions) {
-              echo "$($Item.Name) $($Item.Version)" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
-              "$($Item.Name) $($Item.Version)" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
-          }
+            $Date = Get-Date -Format "yyyy-MM-dd"
+            echo "release=$Date.${{ github.run_number }}" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+            
+            $ChangeLogFile = "${{ github.workspace }}/changelog.txt"
+            "$Date.${{ github.run_number }}" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+            
+            echo "# Release summary :package:" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+            "# Release summary :package:" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+            
+            $Versions = Import-Csv -Path "${{ github.workspace }}/binaries.csv" -ErrorAction "Stop"
+            foreach ($Item in $Versions) {
+                echo "$($Item.Name) $($Item.Version)" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+                "$($Item.Name) $($Item.Version), $($Item.Sha256)" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+            }
+            
+            $ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
+            $Path = "${{ github.workspace }}/release"
+            New-Item -Path $Path -ItemType "Directory"
+            foreach ($Item in $Versions) {
+                $params = @{
+                    ErrorAction     = "Continue"
+                    OutFile         = $(Join-Path -Path $Path -ChildPath $(Split-Path -Path $Item.Name -Leaf))
+                    Uri             = $Item.Name
+                    UseBasicParsing = $true
+                }
+                Invoke-WebRequest @params
+            }
 
       # Upload release
       - name: Upload release
+        id: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v2023-08-14
+          #tag_name: v2023-08-14
           prerelease: false
           body_path: ${{ github.workspace }}/changelog.txt
           files: |
-            ${{ github.workspace }}/citrix/CitrixOptimizerTool.zip
-            ${{ github.workspace }}/microsoft/SupportCenterInstaller.msi
+            ${{ github.workspace }}/release/*
