@@ -41,8 +41,8 @@ jobs:
             foreach ($Item in $Versions) {
                 $params = @{
                     ErrorAction     = "Continue"
-                    OutFile         = $(Join-Path -Path $Path -ChildPath $(Split-Path -Path $Item.Name -Leaf))
-                    Uri             = $Item.Name
+                    OutFile         = $(Join-Path -Path $Path -ChildPath $(Split-Path -Path $Item.Url -Leaf))
+                    Uri             = $Item.Url
                     UseBasicParsing = $true
                 }
                 Invoke-WebRequest @params
