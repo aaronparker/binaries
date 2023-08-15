@@ -46,7 +46,7 @@ jobs:
                 Invoke-WebRequest @params
             }
 
-            Copy-Item -Path "${{ github.workspace }}/binaries.csv" -Destination "${{ github.workspace }}/checksums.csv"
+            Copy-Item -Path "${{ github.workspace }}/binaries.csv" -Destination "${{ github.workspace }}/release/checksums.csv"
 
       # Upload release
       - name: Upload release
