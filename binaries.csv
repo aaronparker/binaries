@@ -1,3 +1,6 @@
-Name,File,Version,Sha256
-Citrix Optimizer,citrix/CitrixOptimizerTool.zip,3.2.0.1,d986b493e6d50e694d68ee1b0946053559655b0f2a1348ea82a766630afb7aaf
-Configuration Manager Support Center,microsoft/SupportCenterInstaller.msi,5.2203.1086.1000,8d357b18cbcb51fefa2be8549c07bac61fe432295a49b782eae5b2814dad6f71
+Name,Version,Url,Sha256
+Citrix Optimizer,3.2.0.1,https://stlthppyimgae001.blob.core.windows.net/binaries/CitrixOptimizerTool.zip,d986b493e6d50e694d68ee1b0946053559655b0f2a1348ea82a766630afb7aaf
+Configuration Manager Support Center,5.2203.1086.1000,https://stlthppyimgae001.blob.core.windows.net/binaries/SupportCenterInstaller.msi,8d357b18cbcb51fefa2be8549c07bac61fe432295a49b782eae5b2814dad6f71
+Citrix Multi-session OS Virtual Delivery Agent,2305.1,https://stlthppyimgae001.blob.core.windows.net/binaries/VDAServerSetup_2305.exe,f30d6b5268859bc802693f6017df8517de9901928d9628d9572487287ec26cb2
+Citrix Single-session OS Virtual Delivery Agent 2305.1,https://stlthppyimgae001.blob.core.windows.net/binaries/VDAWorkstationSetup_2305.exe,bc2d02f83be8a6a7fc18611e3afb13c314303960025eb7d214ad31df4857ca92
+Citrix Single-session OS Core Services Virtual Delivery Agent,2305,https://stlthppyimgae001.blob.core.windows.net/binaries/VDAWorkstationCoreSetup_2305.exe,b7fc0bed8514d3f2b1d888baa93420820c593ca660e1334594d3f62bd21a6451
