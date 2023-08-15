@@ -20,29 +20,27 @@ jobs:
         id: binaries
         shell: pwsh
         run: |
+            Install-Module -Name MarkdownPS -Confirm:$false -Force
+
             $Date = Get-Date -Format "yyyy-MM-dd"
             echo "release=$Date.${{ github.run_number }}" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-            
+
             $ChangeLogFile = "${{ github.workspace }}/changelog.txt"
-            "$Date.${{ github.run_number }}" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
-            
             echo "# Release summary :package:" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
             "# Release summary :package:" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
-            
+
             $Versions = Import-Csv -Path "${{ github.workspace }}/binaries.csv" -ErrorAction "Stop"
-            foreach ($Item in $Versions) {
-                echo "$($Item.Name) $($Item.Version)" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
-                "$($Item.Name) $($Item.Version), $($Item.Sha256)" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
-            }
-            
+            echo $($Versions | New-MdTable) | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+            $Versions | New-MdTable | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+
             $ProgressPreference = [System.Management.Automation.ActionPreference]::SilentlyContinue
             $Path = "${{ github.workspace }}/release"
             New-Item -Path $Path -ItemType "Directory"
             foreach ($Item in $Versions) {
                 $params = @{
                     ErrorAction     = "Continue"
-                    OutFile         = $(Join-Path -Path $Path -ChildPath $(Split-Path -Path $Item.Url -Leaf))
-                    Uri             = $Item.Url
+                    OutFile         = $(Join-Path -Path $Path -ChildPath $Item.Filename)
+                    Uri             = "${{ secrets.BLOB_URL }}$($Item.Filename)"
                     UseBasicParsing = $true
                 }
                 Invoke-WebRequest @params
