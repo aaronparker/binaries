@@ -1,0 +1,47 @@
+name: New release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  new-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set release parameters
+        id: release
+        shell: pwsh
+        run: |
+          $Date = Get-Date -Format "yyyy-MM-dd"
+          echo "release=$Date.${{ github.run_number }}" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+          $ChangeLogFile = "${{ github.workspace }}/changelog.txt"
+          "$Date.${{ github.run_number }}" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+          
+          echo "# Release summary :package:" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          "# Release summary :package:" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+
+          $Versions = Import-Csv -Path "${{ github.workspace }}/binaries.csv" -ErrorAction "Stop"
+          foreach ($Item in $Versions) {
+              echo "$($Item.Name) $($Item.Version)" | Out-File -FilePath $Env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+              "$($Item.Name) $($Item.Version)" | Out-File -FilePath $ChangeLogFile -Encoding utf8 -Append
+          }
+
+      # Upload release
+      - name: Upload release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v2023-08-14
+          prerelease: false
+          body_path: ${{ github.workspace }}/changelog.txt
+          files: |
+            ${{ github.workspace }}/citrix/CitrixOptimizerTool.zip
+            ${{ github.workspace }}/microsoft/SupportCenterInstaller.msi
