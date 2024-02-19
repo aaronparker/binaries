@@ -1,6 +1,3 @@
 Name,Version,Filename,Sha256
-Citrix Optimizer,3.2.0.1,CitrixOptimizerTool.zip,d986b493e6d50e694d68ee1b0946053559655b0f2a1348ea82a766630afb7aaf
 Microsoft Configuration Manager Support Center,5.2203.1086.1000,SupportCenterInstaller.msi,8d357b18cbcb51fefa2be8549c07bac61fe432295a49b782eae5b2814dad6f71
-Citrix Multi-session OS Virtual Delivery Agent,2305.1,VDAServerSetup_2305.exe,f30d6b5268859bc802693f6017df8517de9901928d9628d9572487287ec26cb2
-Citrix Single-session OS Virtual Delivery Agent,2305.1,VDAWorkstationSetup_2305.exe,bc2d02f83be8a6a7fc18611e3afb13c314303960025eb7d214ad31df4857ca92
-Citrix Single-session OS Core Services Virtual Delivery Agent,2305,VDAWorkstationCoreSetup_2305.exe,b7fc0bed8514d3f2b1d888baa93420820c593ca660e1334594d3f62bd21a6451
+Microsoft Type Library Registration Tool,6.0.81.91,REGTLIB.EXE,698fa391b9a4a6a7f4acb62e54ac22e0582dacbc8eed58e52375dd869ae30745
