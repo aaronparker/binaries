@@ -51,7 +51,7 @@ jobs:
       # Upload release
       - name: Upload release
         id: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           prerelease: false
           body_path: ${{ github.workspace }}/changelog.txt
